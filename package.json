@@ -11,7 +11,7 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
-        "axios": "^0.26.0",
+        "axios": "^0.26.1",
         "bootstrap": "^4.0.0",
         "cross-env": "^7.0",
         "jquery": "^3.2",
@@ -25,25 +25,24 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
-        "axios": "^0.26.0",
         "bootstrap": "^4.0.0",
+        "cors": "^2.8.5",
         "cross-env": "^7.0",
+        "dotenv": "^8.2.0",
+        "express": "^4.18.2",
+        "fs": "0.0.1-security",
+        "https": "^1.0.0",
         "jquery": "^3.2",
         "laravel-mix": "^6.0.42",
         "lodash": "^4.17.13",
+        "mysql": "^2.18.1",
         "popper.js": "^1.12",
         "resolve-url-loader": "^5.0.0",
         "sass": "^1.20.1",
         "sass-loader": "^8.0.0",
+        "socket.io": "^4.7.2",
+        "socket.io-client": "^4.4.1",
         "vue": "^2.5.17",
-        "vue-template-compiler": "^2.6.10",
-        "cors": "^2.8.5",
-        "dotenv": "^8.2.0",
-        "express": "^4.17.3",
-        "fs": "0.0.1-security",
-        "https": "^1.0.0",
-        "mysql": "^2.18.1",
-        "socket.io": "^4.4.1",
-        "socket.io-client": "^4.4.1"
+        "vue-template-compiler": "^2.6.10"
     }
 }
