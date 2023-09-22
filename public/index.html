@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Chat Module Demo</title>
+	<style type="text/css">
+		* 					{ font-family: 'Roboto Mono'; }
+		body 				{ width: 960px; margin: 0 auto; }
+		textarea			{ resize: none; border: dashed 2px #a9a9a9; width: 100%;}
+		input[type='text'] 	{ width: 20%; }
+		.fright				{ float: right; }
+		.fleft				{ float: left; }
+		.clearfix			{ clear: both; }
+		.hide				{ display: none; }
+		.mb-10				{ margin-bottom: 10px; }
+		.mt-10				{ margin-top: 10px; }
+	</style>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+</head>
+<body>
+	<h1>Chat Module Demo</h1>
+	<hr size="2" color="#e1e1e1">
+	<div id="message-history" class="hide mb-10">
+		<hr size="2" color="#e1e1e1">
+	</div>
+
+	<div>
+		<input type="text" id="room" placeholder="Enter Your Room Code" value="pp7wrUU7cLiKkNJAaGOO">
+		<input type="text" id="username" placeholder="Enter Your Username" value="KeIM7uqbINRQY01sVQtm">
+		<button id="connectGlobalRoom" class="mb-10 mt-10">Connect Global Room</button>	
+		<button id="connectToRoom" class="mb-10 mt-10">Connect To Room</button>	
+		<button id="disconnectFromRoom" class="mb-10 mt-10">Disconnect From Chat Room</button>	
+		<button id="disconnectGlobal" class="mb-10 mt-10">Disconnect Globally</button>	
+		<br>
+		<label id="showOnline"></label>
+		<textarea rows="5" id="messageArea"></textarea>
+		<br> <br>
+		<button id="sendMessage">Send Message</button>		
+		<button id="sendFile">Send File</button>		
+		<button id="shareLocation">Share Location</button>		
+		<button id="deliveredMessage">Delivered Message</button>		
+		<button id="readMessage">Read Message</button>		
+		<button id="getMessageStatus">Get Message Status</button>		
+		<!-- <button id="getRooms">Get Rooms</button>		 -->
+	</div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.1/socket.io.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var socket = io.connect('http://hihellochat-env.eba-a9sgzdmf.ap-south-1.elasticbeanstalk.com');
+			// var socket = io.connect('http://chat.hihelloapp.com:8080');
+			// var socket = io.connect('http://chat.hihelloapp.com');
+			console.log("Socket ::",socket);
+
+			/* Join The Socket Room */
+				$('#connectGlobalRoom').on('click', function () {
+					socket.emit('join-global', {
+						user_id 	: 	$('#username').val(),
+					})
+				});
+
+			/* Join The Socket Room */
+				$('#connectToRoom').on('click', function () {
+					socket.emit('join-room', {
+						room_id 	: 	$('#room').val(),
+						user_id 	: 	$('#username').val(),
+					})
+				});
+
+			/* Manage Online */
+				$('#messageArea').on('keyup', function() {
+					socket.emit('online', {
+						room_id 	: 	$('#room').val(),
+						user_id 	: 	$('#username').val(),
+					});
+				});
+
+			/* Left the socket room*/
+				$('#disconnectFromRoom').on('click', function () {
+					socket.emit('disconnect-room', {
+					 	room_id 	: 	$('#room').val(),
+						user_id 	: 	$('#username').val(),
+					});
+				});
+
+			/* Left the socket globally*/
+				$('#disconnectGlobal').on('click', function () {
+					socket.emit('disconnect-global', {
+						user_id 	: 	$('#username').val(),
+					});
+				});
+
+			/* Send Message */
+				$('#sendMessage').on('click', function () {
+					var value = $("#messageArea").val();
+
+					socket.emit('send-message',{
+						id 	 				: 	'cc79cdcv9ve8ev',
+						room_id 			: 	$('#room').val(),
+						sender_id 	 		: 	$('#username').val(),
+						receiver_id 	 	: 	'S2xNR5pkzv82GlsGx7pC',
+						message_type 		: 	'text',
+						message_value 		: 	value,
+						time  				: 	'2022-02-10 15:05',
+					});
+				});
+
+			/* Send Message */
+				$('#sendFile').on('click', function () {
+					socket.emit('send-message',{
+						id 	 				: 	'cc79cdcv9ve8ev',
+						room_id 			: 	$('#room').val(),
+						sender_id 	 		: 	$('#username').val(),
+						receiver_id 	 	: 	'S2xNR5pkzv82GlsGx7pC',
+						message_type 		: 	'file',
+						message_value 		: 	'New File',
+						message_file_path 	: 	'/file/path/file1.png',
+						message_file_type 	: 	'.png',
+						time  				: 	'2022-02-10 15:05',
+					});
+				});
+
+			/* Share Location */
+				$('#shareLocation').on('click', function () {
+					socket.emit('send-message',{
+						id 	 				: 	'cc79cdcv9ve8ev',
+						room_id 			: 	$('#room').val(),
+						sender_id 	 		: 	$('#username').val(),
+						receiver_id 	 	: 	'S2xNR5pkzv82GlsGx7pC',
+						message_type 		: 	'location',
+						message_value 		: 	'New Location',
+						message_lng 		: 	'23.022505',
+						message_lat 		: 	'72.571365',
+						time  				: 	'2022-02-10 15:05',
+					});
+				});
+
+			/* Delivered Message */
+				$('#deliveredMessage').on('click', function () {
+					socket.emit('message-delivered',{
+						user_id 		: 	$('#username').val(),
+						time  			: 	'2022-03-02 15:05',
+					});
+				});
+
+			/* Read Message */
+				$('#readMessage').on('click', function () {
+					socket.emit('message-read',{
+						id 	 			: 	'sdfccdsf79cdc234v9ve8ev',
+						room_id 	 	: 	$('#room').val(),
+						sender_id 		: 	$('#username').val(),
+						receiver_id 	: 	'S2xNR5pkzv82GlsGx7pC',
+						time  			: 	'2022-03-02 15:05',
+					});
+				});
+
+			/* Get Message Status */
+				$('#getMessageStatus').on('click', function () {
+					socket.emit('message-status',{
+						id 	 			: 	'cc79cdcv9ve8evrewrewr',
+					});
+				});
+
+			/* Receive All Emits */
+				socket.on('online', function(response) {
+					if (response.user_id != $('#username').val()) {
+						$('#showOnline').html( response.user_id+" is online...");
+						$('#showOnline').removeClass('hide')
+						setTimeout(function () {
+							if ( !$('#showOnline').hasClass('hide') ) $('#showOnline').addClass('hide')
+						}, 2000)
+					}
+				});
+
+			/* Get Chat Rooms */
+				// $('#getRooms').on('click', function () {
+				// 	socket.emit('get-rooms',{
+				// 		user_id 	 	: 	'KeIM7uqbINRQY01sVQtm',
+				// 		limit 			: 	10,
+				// 		offset 			: 	0,
+				// 	});
+				// });
+				
+
+			/* Receive All Emits */
+				// socket.on('typing', function(response) {
+				// 	if (response.user != $('#username').val()) {
+				// 		$('#showTyping').html( response.user+" is typing...");
+				// 		$('#showTyping').removeClass('hide')
+				// 		setTimeout(function () {
+				// 			if ( !$('#showTyping').hasClass('hide') ) $('#showTyping').addClass('hide')
+				// 		}, 2000)
+				// 	}
+				// });
+
+				socket.on('new-room', function(response) {
+					console.log("new-room ::", response);
+					// APPEND MESSAGE
+					// CLEAR TEXT AREA
+				});
+		});
+	</script>
+</body>
+</html>
