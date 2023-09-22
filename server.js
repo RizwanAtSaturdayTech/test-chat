@@ -7,7 +7,7 @@ const cors 		= 	require('cors');
 const io 		= 	require('socket.io')(server, { pingInterval: 2000, pingTimeout: 10000, allowEIO3: true });
 const mysql 	= 	require('mysql');
 const tech 		= 	io.of('/');
-const port 		= 	80;
+const port 		= 	process.env.PORT || 3000;
 
 const APP_URL 	= 	"https://developer.hihelloapp.com/";
 // const APP_URL 	= 	"http://localhost:8000/";
